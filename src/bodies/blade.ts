@@ -4,7 +4,7 @@ import { FixtureData } from '../fixtures/fixtureData'
 import { Fighter } from './fighter'
 
 export class Blade extends BodyData {
-  movePower = 4
+  movePower = 10
   length = 6
   fromPoint = Vec2(0, 0)
   toPoint = Vec2(0, 0)
@@ -38,15 +38,22 @@ export class Blade extends BodyData {
     super.onStep()
     this.fromPoint = this.body.getWorldPoint(Vec2(0, 0))
     this.toPoint = this.fighter.body.getWorldCenter()
-    const force = Vec2.mul(Vec2.sub(this.toPoint, this.fromPoint), this.movePower)
-    this.body.applyForce(force, this.fromPoint)
+    const vector = Vec2.sub(this.toPoint, this.fromPoint)
+    const length = vector.length()
+    const loose = 2
+    if (length > loose) {
+      vector.normalize()
+      const scale = length - loose
+      const force = Vec2.mul(vector, scale * this.movePower)
+      this.body.applyForce(force, this.fromPoint)
+    }
   }
 
-  preDraw (): void {
+  drawConnection (): void {
     this.fromPoint = this.body.getWorldPoint(Vec2(0, 0))
     this.toPoint = this.fighter.body.getWorldCenter()
     const context = this.game.runner.context
-    context.strokeStyle = 'rgb(100,100,100,0.5)'
+    context.strokeStyle = 'rgb(256,256,256,0.5)'
     context.lineWidth = 0.1
     context.beginPath()
     context.moveTo(this.fromPoint.x, this.fromPoint.y)

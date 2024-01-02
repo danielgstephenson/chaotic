@@ -18,7 +18,7 @@ class Runner {
   maxZoom = 5
   camera = {
     position: new Vec2(0, 0),
-    zoom: -10
+    zoom: -15
   }
 
   constructor (game: Game) {
@@ -72,12 +72,6 @@ class Runner {
     this.drawBackground()
     const context = this.context
     const fixtures = this.getFixtures()
-    const bodies = this.getBodies()
-    bodies.forEach(body => {
-      this.followCamera()
-      const bodyData = body.getUserData() as BodyData
-      bodyData.preDraw()
-    })
     fixtures.forEach(fixture => {
       this.followCamera()
       const fixtureData = fixture.getUserData() as FixtureData
@@ -101,15 +95,6 @@ class Runner {
       }
       this.followCamera()
       fixtureData.postDraw()
-    })
-    bodies.forEach(body => {
-      this.followCamera()
-      const bodyData = body.getUserData() as BodyData
-      const bodyPosition = body.getPosition()
-      context.translate(bodyPosition.x, bodyPosition.y)
-      context.rotate(body.getAngle())
-      this.followCamera()
-      bodyData.postDraw()
     })
   }
 

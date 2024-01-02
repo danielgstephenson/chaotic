@@ -27,6 +27,7 @@ export class Fighter extends BodyData {
     })
     this.torso.layer = 11
     this.torso.label = 'torso'
+    this.torso.preDraw = () => this.drawConnection()
     this.blade = new Blade(this)
   }
 
@@ -39,6 +40,19 @@ export class Fighter extends BodyData {
     this.moveDir.normalize()
     const force = Vec2.mul(this.moveDir, this.movePower)
     this.body.applyForceToCenter(force)
+  }
+
+  drawConnection (): void {
+    const fromPoint = this.body.getWorldCenter()
+    const toPoint = this.blade.body.getWorldPoint(Vec2(0, 0))
+    const context = this.game.runner.context
+    context.strokeStyle = 'rgb(256,256,256,0.5)'
+    context.lineWidth = 0.1
+    context.beginPath()
+    context.moveTo(fromPoint.x, fromPoint.y)
+    context.lineTo(toPoint.x, toPoint.y)
+    context.closePath()
+    context.stroke()
   }
 
   die (): void {}
