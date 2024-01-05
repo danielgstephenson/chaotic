@@ -3,7 +3,6 @@ import { FixtureData } from '../fixtures/fixtureData'
 import { Environment } from '../bodies/environment'
 import { Enemy } from '../bodies/enemy'
 import { Game } from '../game'
-import { EnemyDef } from '../bodies/enemyDef'
 import { Star } from '../bodies/star'
 import { Player } from '../bodies/player'
 
@@ -13,6 +12,7 @@ class Stage {
   player: Player
   environment: Environment
   corners: Vec2[] = []
+  enemies: Enemy[] = []
   runif = (): number => Math.random()
   spawnPoint = Vec2(0, 0)
   spawnAngle = 0
@@ -53,12 +53,14 @@ class Stage {
     if (a.label === 'torso' && b.label === 'blade') {
       contact.setEnabled(false)
     }
+    /*
     if (a.label === 'blade' && b.label === 'wall') {
       contact.setEnabled(false)
     }
     if (a.label === 'wall' && b.label === 'blade') {
       contact.setEnabled(false)
     }
+    */
     if (a.label === 'star' || b.label === 'star') {
       contact.setEnabled(false)
     }
@@ -80,8 +82,9 @@ class Stage {
     return player
   }
 
-  addEnemy (enemyDef: EnemyDef): Enemy {
-    const enemy = new Enemy(this, enemyDef)
+  addEnemy (posistion: Vec2): Enemy {
+    const enemy = new Enemy(this, posistion)
+    this.enemies.push(enemy)
     return enemy
   }
 

@@ -2,14 +2,15 @@ import { Vec2, Circle } from 'planck'
 import { BodyData } from './bodyData'
 import { FixtureData } from '../fixtures/fixtureData'
 import { Stage } from '../stages/stage'
-import { Blade } from './blade'
+import { Weapon } from './weapon'
 
 export class Fighter extends BodyData {
   alive = true
-  movePower = 3
+  movePower = 5
   moveDir = Vec2(0, 0)
   torso: FixtureData
-  blade: Blade
+  weapon: Weapon
+  blade: FixtureData
 
   constructor (stage: Stage, position: Vec2) {
     super(stage, {
@@ -17,7 +18,7 @@ export class Fighter extends BodyData {
       position,
       bullet: true,
       fixedRotation: true,
-      linearDamping: 0.5
+      linearDamping: 1
     })
     this.torso = this.createFixture({
       shape: new Circle(Vec2(0, 0), 0.5),
@@ -28,7 +29,8 @@ export class Fighter extends BodyData {
     this.torso.layer = 11
     this.torso.label = 'torso'
     this.torso.preDraw = () => this.drawConnection()
-    this.blade = new Blade(this)
+    this.weapon = new Weapon(this)
+    this.blade = this.weapon.blade
   }
 
   onStep (): void {
@@ -44,7 +46,7 @@ export class Fighter extends BodyData {
 
   drawConnection (): void {
     const fromPoint = this.body.getWorldCenter()
-    const toPoint = this.blade.body.getWorldPoint(Vec2(0, 0))
+    const toPoint = this.weapon.body.getWorldPoint(Vec2(this.weapon.maxDistance, 0))
     const context = this.game.runner.context
     context.strokeStyle = 'rgb(256,256,256,0.5)'
     context.lineWidth = 0.1

@@ -18,6 +18,7 @@ class Stage1 extends Stage {
       Vec2(+width, +this.north),
       Vec2(-width, +this.north)
     ])
+    this.addEnemy(Vec2(0, 20))
     this.addStar(Vec2(0, this.north - 10))
   }
 

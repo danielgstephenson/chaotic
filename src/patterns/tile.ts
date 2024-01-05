@@ -1,18 +1,18 @@
-const tileCanvas: HTMLCanvasElement = document.createElement('canvas')
-const tileContext: CanvasRenderingContext2D = tileCanvas.getContext('2d') as CanvasRenderingContext2D
+const canvas: HTMLCanvasElement = document.createElement('canvas')
+const context: CanvasRenderingContext2D = canvas.getContext('2d') as CanvasRenderingContext2D
 
-tileCanvas.style.imageRendering = 'pixelated'
+canvas.style.imageRendering = 'pixelated'
 
-const size = 4 // this needs to be an even number
-tileCanvas.width = size
-tileCanvas.height = size
-const color1 = '#000000'
-const color2 = '#020202'
-tileContext.fillStyle = color1
-tileContext.fillRect(0, 0, size, size)
-tileContext.fillStyle = color2
-tileContext.fillRect(0, 0, 0.5 * size, 0.5 * size)
-tileContext.fillRect(0.5 * size, 0.5 * size, 0.5 * size, 0.5 * size)
-tileContext.stroke()
+const size = 100 // this needs to be an even number
+canvas.width = size
+canvas.height = size
+context.fillStyle = '#000000'
+context.strokeStyle = '#060606'
+context.fillRect(0, 0, size, size)
+context.beginPath()
+context.rect(0, 0, size, size)
+context.lineJoin = 'miter'
+context.lineWidth = 1
+context.stroke()
 
-export const tile: CanvasPattern = tileContext.createPattern(tileCanvas, 'repeat') as CanvasPattern
+export const tile: CanvasPattern = context.createPattern(canvas, 'repeat') as CanvasPattern

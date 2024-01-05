@@ -1,9 +1,9 @@
 import { CircleShape, Fixture, PolygonShape, Vec2, Body, ChainShape } from 'planck'
-import { tile } from './patterns/tile'
 import { FixtureData } from './fixtures/fixtureData'
 import { BodyData } from './bodies/bodyData'
 import { clamp } from './math'
 import { Game } from './game'
+import { tile } from './patterns/tile'
 
 class Runner {
   game: Game
@@ -166,13 +166,13 @@ class Runner {
     context.imageSmoothingEnabled = false
     context.fillStyle = tile
     context.save()
-    context.scale(5, 5)
     context.beginPath()
     this.game.stage.corners.forEach((corner: Vec2, i: number) => {
       if (i === 0) context.moveTo(corner.x, corner.y)
       else context.lineTo(corner.x, corner.y)
     })
     context.closePath()
+    context.scale(0.1, 0.1)
     context.fill()
     context.restore()
   }

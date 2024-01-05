@@ -7,7 +7,7 @@ export class Player extends Fighter {
     super(stage, posistion)
     this.label = 'player'
     this.torso.color = 'rgb(0,40,300)'
-    this.blade.fixtureData.color = 'rgba(0,200,200)'
+    this.blade.color = 'rgb(0,200,200)'
   }
 
   onStep (): void {
