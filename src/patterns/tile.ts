@@ -7,7 +7,7 @@ const size = 100 // this needs to be an even number
 canvas.width = size
 canvas.height = size
 context.fillStyle = '#000000'
-context.strokeStyle = '#060606'
+context.strokeStyle = '#161616'
 context.fillRect(0, 0, size, size)
 context.beginPath()
 context.rect(0, 0, size, size)
