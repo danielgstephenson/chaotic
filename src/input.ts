@@ -13,6 +13,9 @@ class Input {
     window.onmousemove = (event: MouseEvent) => this.onmousemove(event)
     window.onmousedown = (event: MouseEvent) => this.onmousedown(event)
     window.onmouseup = (event: MouseEvent) => this.onmouseup(event)
+    window.ontouchstart = (event: TouchEvent) => this.ontouchstart(event)
+    window.ontouchend = (event: TouchEvent) => this.ontouchend(event)
+    window.ontouchmove = (event: TouchEvent) => this.ontouchmove(event)
   }
 
   onkeydown (event: KeyboardEvent): void {
@@ -22,6 +25,10 @@ class Input {
 
   onkeyup (event: KeyboardEvent): void {
     this.keyboard.set(event.code, false)
+  }
+
+  isKeyDown (key: string): boolean {
+    return this.keyboard.get(key) ?? false
   }
 
   onmousemove (event: MouseEvent): void {
@@ -38,8 +45,27 @@ class Input {
     this.mouse.buttons[event.button] = false
   }
 
-  isKeyDown (key: string): boolean {
-    return this.keyboard.get(key) ?? false
+  ontouchstart (event: TouchEvent): void {
+    this.mouse.buttons[0] = true
+    if (event.touches.length > 0) {
+      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    }
+  }
+
+  ontouchend (event: TouchEvent): void {
+    this.mouse.buttons[0] = false
+    if (event.touches.length > 0) {
+      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    }
+  }
+
+  ontouchmove (event: TouchEvent): void {
+    if (event.touches.length > 0) {
+      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    }
   }
 }
 
