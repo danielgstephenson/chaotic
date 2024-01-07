@@ -28,7 +28,6 @@ export class Fighter extends BodyData {
     })
     this.torso.layer = 11
     this.torso.label = 'torso'
-    this.torso.preDraw = () => this.drawConnection()
     this.weapon = new Weapon(this)
     this.blade = this.weapon.blade
   }

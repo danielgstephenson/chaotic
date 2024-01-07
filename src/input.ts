@@ -3,7 +3,8 @@ import { Game } from './game'
 class Input {
   game: Game
   keyboard = new Map<string, boolean>()
-  cursor = { x: 0, y: 0, buttons: [false, false, false, false, false] }
+  mouse = { x: 0, y: 0, buttons: [false, false, false, false, false] }
+  mode = 'keyboard'
 
   constructor (game: Game) {
     this.game = game
@@ -24,17 +25,17 @@ class Input {
   }
 
   onmousemove (event: MouseEvent): void {
-    this.cursor.x = event.clientX - 0.5 * window.innerWidth
-    this.cursor.y = 0.5 * window.innerHeight - event.clientY
+    this.mouse.x = event.clientX - 0.5 * window.innerWidth
+    this.mouse.y = 0.5 * window.innerHeight - event.clientY
   }
 
   onmousedown (event: MouseEvent): void {
-    this.cursor.buttons[event.button] = true
+    this.mouse.buttons[event.button] = true
     event.preventDefault()
   }
 
   onmouseup (event: MouseEvent): void {
-    this.cursor.buttons[event.button] = false
+    this.mouse.buttons[event.button] = false
   }
 
   isKeyDown (key: string): boolean {

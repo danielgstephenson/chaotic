@@ -1,10 +1,10 @@
 import { Vec2 } from 'planck'
 import { Stage } from './stage'
-import seedrandom from 'seedrandom'
+import { Game } from '../game'
 
 class Stage1 extends Stage {
-  setup (): void {
-    this.runif = seedrandom(String(Math.random()))
+  constructor (game: Game) {
+    super(game)
     this.north = 190
     const width = 20
     this.corners.push(Vec2(-width, this.north))
@@ -18,6 +18,7 @@ class Stage1 extends Stage {
       Vec2(+width, +this.north),
       Vec2(-width, +this.north)
     ])
+    this.player = this.addPlayer(Vec2(0, 0))
     this.addEnemy(Vec2(0, 20))
     this.addStar(Vec2(0, this.north - 10))
   }
@@ -30,7 +31,7 @@ class Stage1 extends Stage {
     super.respawn()
     this.game.state = 'play'
     console.log('respawnPoint', this.spawnPoint)
-    this.game.stage = new Stage1(this.game, this.spawnPoint, this.spawnAngle)
+    this.game.stage = new Stage1(this.game)
   }
 
   complete (): void {

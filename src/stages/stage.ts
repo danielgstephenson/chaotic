@@ -1,40 +1,42 @@
 import { World, Vec2, Contact } from 'planck'
 import { FixtureData } from '../fixtures/fixtureData'
 import { Environment } from '../bodies/environment'
-import { Enemy } from '../bodies/enemy'
 import { Game } from '../game'
 import { Star } from '../bodies/star'
-import { Player } from '../bodies/player'
+import { Fighter } from '../bodies/fighter'
 
 class Stage {
   game: Game
   world: World
-  player: Player
+  player?: Fighter
   environment: Environment
   corners: Vec2[] = []
-  enemies: Enemy[] = []
-  runif = (): number => Math.random()
+  enemies: Fighter[] = []
   spawnPoint = Vec2(0, 0)
-  spawnAngle = 0
   north = 100
 
-  constructor (game: Game, spawnPoint?: Vec2, spawnAngle?: number) {
+  constructor (game: Game) {
     this.game = game
     this.world = new World({ gravity: new Vec2(0, 0) })
     this.world.on('pre-solve', (contact) => this.preSolve(contact))
     this.world.on('begin-contact', (contact) => this.beginContact(contact))
-    this.player = this.addPlayer(Vec2(0, 0))
     this.environment = new Environment(this)
-    this.spawnPoint = spawnPoint ?? this.spawnPoint
-    this.spawnAngle = spawnAngle ?? this.spawnAngle
-    this.setup()
   }
 
-  setup (): void {
-    //
+  onStep (): void {
+    if (this.player != null) {
+      const input = this.game.input
+      let x = 0
+      let y = 0
+      if (input.isKeyDown('KeyW') || input.isKeyDown('ArrowUp')) y += 1
+      if (input.isKeyDown('KeyS') || input.isKeyDown('ArrowDown')) y -= 1
+      if (input.isKeyDown('KeyA') || input.isKeyDown('ArrowLeft')) x -= 1
+      if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) x += 1
+      this.player.moveDir = Vec2(x, y)
+      const mouse = input.mouse
+      if (mouse.buttons[0]) this.player.moveDir = Vec2(mouse.x, mouse.y)
+    }
   }
-
-  onStep (): void { }
 
   respawn (): void {
     console.log('respawn')
@@ -77,13 +79,19 @@ class Stage {
     }
   }
 
-  addPlayer (posistion: Vec2): Player {
-    const player = new Player(this, posistion)
-    return player
+  addPlayer (posistion: Vec2): Fighter {
+    this.player = new Fighter(this, posistion)
+    this.player.label = 'player'
+    this.player.torso.color = 'rgb(0,40,300)'
+    this.player.blade.color = 'rgb(0,200,200)'
+    return this.player
   }
 
-  addEnemy (posistion: Vec2): Enemy {
-    const enemy = new Enemy(this, posistion)
+  addEnemy (posistion: Vec2): Fighter {
+    const enemy = new Fighter(this, posistion)
+    enemy.label = 'enemy'
+    enemy.torso.color = 'rgb(0,120,0)'
+    enemy.blade.color = 'rgb(100,256,50)'
     this.enemies.push(enemy)
     return enemy
   }
@@ -95,13 +103,13 @@ class Stage {
 
   shuffled (array: any[]): any[] {
     return array
-      .map(item => ({ value: item, priority: this.runif() }))
+      .map(item => ({ value: item, priority: Math.random() }))
       .sort((a, b) => a.priority - b.priority)
       .map(x => x.value)
   }
 
   eps (): number {
-    return 2 * this.runif() - 1
+    return 2 * Math.random() - 1
   }
 }
 

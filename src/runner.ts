@@ -55,14 +55,16 @@ class Runner {
   }
 
   step (): void {
-    this.camera.position = this.game.stage.player.body.getPosition()
+    if (this.game.stage.player != null) {
+      this.camera.position = this.game.stage.player.body.getPosition()
+    }
     this.game.stage.onStep()
     const bodies = this.getBodies()
     bodies.forEach(body => {
       const bodyData = body.getUserData() as BodyData
       bodyData.onStep()
     })
-    const stepSize = this.game.stage.player.alive ? this.timeStep * this.timeScale : this.timeStep * this.timeScale
+    const stepSize = this.timeStep * this.timeScale
     this.game.stage.world.step(stepSize)
     this.worldTime += this.timeStep
   }
