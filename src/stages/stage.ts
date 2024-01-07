@@ -33,7 +33,7 @@ class Stage {
       if (input.isKeyDown('KeyA') || input.isKeyDown('ArrowLeft')) x -= 1
       if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) x += 1
       this.player.moveDir = Vec2(x, y)
-      const mouse = input.mouse
+      const mouse = input.cursor
       if (mouse.buttons[0]) this.player.moveDir = Vec2(mouse.x, mouse.y)
     }
   }

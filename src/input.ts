@@ -3,8 +3,8 @@ import { Game } from './game'
 class Input {
   game: Game
   keyboard = new Map<string, boolean>()
-  mouse = { x: 0, y: 0, buttons: [false, false, false, false, false] }
-  mode = 'keyboard'
+  cursor = { x: 0, y: 0, buttons: [false, false, false, false, false] }
+  pinchDiff = 0
 
   constructor (game: Game) {
     this.game = game
@@ -13,9 +13,11 @@ class Input {
     window.onmousemove = (event: MouseEvent) => this.onmousemove(event)
     window.onmousedown = (event: MouseEvent) => this.onmousedown(event)
     window.onmouseup = (event: MouseEvent) => this.onmouseup(event)
+    window.onwheel = (event: WheelEvent) => this.onwheel(event)
     window.ontouchstart = (event: TouchEvent) => this.ontouchstart(event)
-    window.ontouchend = (event: TouchEvent) => this.ontouchend(event)
+    window.ontouchend = (event: TouchEvent) => this.ontouchmove(event)
     window.ontouchmove = (event: TouchEvent) => this.ontouchmove(event)
+    window.oncontextmenu = () => false
   }
 
   onkeydown (event: KeyboardEvent): void {
@@ -32,40 +34,68 @@ class Input {
   }
 
   onmousemove (event: MouseEvent): void {
-    this.mouse.x = event.clientX - 0.5 * window.innerWidth
-    this.mouse.y = 0.5 * window.innerHeight - event.clientY
+    this.cursor.x = event.clientX - 0.5 * window.innerWidth
+    this.cursor.y = 0.5 * window.innerHeight - event.clientY
   }
 
   onmousedown (event: MouseEvent): void {
-    this.mouse.buttons[event.button] = true
+    this.cursor.buttons[event.button] = true
     event.preventDefault()
   }
 
   onmouseup (event: MouseEvent): void {
-    this.mouse.buttons[event.button] = false
+    this.cursor.buttons[event.button] = false
+  }
+
+  onwheel (event: WheelEvent): void {
+    this.game.runner.zoom(0.001 * event.deltaY)
   }
 
   ontouchstart (event: TouchEvent): void {
-    this.mouse.buttons[0] = true
-    if (event.touches.length > 0) {
-      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    this.cursor.buttons[0] = event.touches.length === 1
+    if (event.touches.length === 1) {
+      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    }
+    if (event.touches.length === 2) {
+      this.pinchDiff = this.getPinchDiff(event)
     }
   }
 
   ontouchend (event: TouchEvent): void {
-    this.mouse.buttons[0] = false
-    if (event.touches.length > 0) {
-      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    this.cursor.buttons[0] = event.touches.length === 1
+    if (event.touches.length === 1) {
+      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
+    }
+    if (event.touches.length === 2) {
+      this.pinchDiff = this.getPinchDiff(event)
     }
   }
 
-  ontouchmove (event: TouchEvent): void {
-    if (event.touches.length > 0) {
-      this.mouse.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.mouse.y = 0.5 * window.innerHeight - event.touches[0].clientY
+  ontouchmove (event: TouchEvent): boolean {
+    this.cursor.buttons[0] = event.touches.length === 1
+    if (event.touches.length === 1) {
+      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
     }
+    if (event.touches.length === 2) {
+      const newPinchDiff = this.getPinchDiff(event)
+      const dPinchDiff = newPinchDiff - this.pinchDiff
+      this.game.runner.zoom(0.001 * dPinchDiff)
+    }
+    return false
+  }
+
+  getPinchDiff = function (event: TouchEvent): number {
+    if (event.touches.length !== 2) return 0
+    const x0 = event.touches[0].clientX
+    const y0 = event.touches[0].clientY
+    const x1 = event.touches[1].clientX
+    const y1 = event.touches[1].clientY
+    const dx = x1 - x0
+    const dy = y1 - y0
+    return Math.sqrt(dx * dx + dy * dy)
   }
 }
 

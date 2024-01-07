@@ -20,8 +20,8 @@ class Game {
     this.playDiv = document.getElementById('playDiv') as HTMLDivElement
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
-    this.input = new Input(this)
     this.runner = new Runner(this)
+    this.input = new Input(this)
     this.stage = new Stage1(this)
     this.mainMenu = new MainMenu(this)
     this.deathMenu = new DeathMenu(this)

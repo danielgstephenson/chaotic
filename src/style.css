@@ -6,7 +6,9 @@
   font-family: no-continue;
   src: url(/fonts/NoContinue.ttf);
 }
-
+* {
+  touch-action: manipulation;
+}
 body {
   background-color: #000000;
   margin: 0

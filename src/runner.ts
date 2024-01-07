@@ -14,22 +14,21 @@ class Runner {
   lastFrameTime = 0
   worldTime = 0
   targetWorldTime = 0
-  minZoom = -15
-  maxZoom = 5
   camera = {
     position: new Vec2(0, 0),
-    zoom: -15
+    zoom: -10,
+    minZoom: -15,
+    maxZoom: 5
   }
 
   constructor (game: Game) {
     this.game = game
     this.context = this.game.context
-    window.addEventListener('wheel', (event) => this.onwheel(event))
   }
 
-  onwheel (event: WheelEvent): void {
-    const zoom = this.camera.zoom - 0.005 * event.deltaY
-    this.camera.zoom = clamp(this.minZoom, this.maxZoom, zoom)
+  zoom (amount: number): void {
+    const zoom = this.camera.zoom - amount
+    this.camera.zoom = clamp(this.camera.minZoom, this.camera.maxZoom, zoom)
   }
 
   start (): void {
@@ -146,8 +145,8 @@ class Runner {
   setupCanvas (): void {
     const context = this.context
     const canvas = context.canvas
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = window.visualViewport?.width ?? window.innerWidth
+    canvas.height = window.visualViewport?.height ?? window.innerHeight
     this.followCamera()
   }
 

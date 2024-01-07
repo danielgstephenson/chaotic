@@ -17,6 +17,7 @@ export class MainMenu {
     this.startButton.onmouseenter = () => this.startButton.focus()
     this.optionsButton.onmouseenter = () => this.optionsButton.focus()
     this.startButton.onclick = () => this.start()
+    this.startButton.ontouchstart = () => this.start()
     this.startButton.focus()
   }
 
