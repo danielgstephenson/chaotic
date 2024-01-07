@@ -82,7 +82,7 @@ class Input {
     if (event.touches.length === 2) {
       const newPinchDiff = this.getPinchDiff(event)
       const dPinchDiff = newPinchDiff - this.pinchDiff
-      this.game.runner.zoom(-0.001 * dPinchDiff)
+      this.game.runner.zoom(-0.01 * dPinchDiff)
     }
     return false
   }
