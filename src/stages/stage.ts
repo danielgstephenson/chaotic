@@ -1,9 +1,9 @@
 import { World, Vec2, Contact } from 'planck'
 import { FixtureData } from '../fixtures/fixtureData'
-import { Environment } from '../bodies/environment'
+import { Environment } from '../actors/environment'
 import { Game } from '../game'
-import { Star } from '../bodies/star'
-import { Fighter } from '../bodies/fighter'
+import { Star } from '../actors/star'
+import { Fighter } from '../actors/fighter'
 
 class Stage {
   game: Game
@@ -33,8 +33,11 @@ class Stage {
       if (input.isKeyDown('KeyA') || input.isKeyDown('ArrowLeft')) x -= 1
       if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) x += 1
       this.player.moveDir = Vec2(x, y)
-      const mouse = input.cursor
-      if (mouse.buttons[0]) this.player.moveDir = Vec2(mouse.x, mouse.y)
+      const cursor = input.cursor
+      const canvas = this.game.runner.context.canvas
+      const vmin = Math.min(canvas.width, canvas.height)
+      const cursorDist = Math.sqrt(cursor.x * cursor.x + cursor.y * cursor.y) / vmin
+      if (cursorDist > 0.05) this.player.moveDir = Vec2(cursor.x, cursor.y)
     }
   }
 
@@ -71,10 +74,10 @@ class Stage {
   beginContact (contact: Contact): void {
     const a = contact.getFixtureA().getUserData() as FixtureData
     const b = contact.getFixtureB().getUserData() as FixtureData
-    if (a.label === 'star' && b.label === 'torso' && b.bodyData.label === 'player') {
+    if (a.label === 'star' && b.label === 'torso' && b.actor.label === 'player') {
       this.complete()
     }
-    if (b.label === 'star' && a.label === 'torso' && a.bodyData.label === 'player') {
+    if (b.label === 'star' && a.label === 'torso' && a.actor.label === 'player') {
       this.complete()
     }
   }

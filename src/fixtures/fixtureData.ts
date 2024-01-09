@@ -1,10 +1,10 @@
 import { Fixture, FixtureDef, Body } from 'planck'
-import { BodyData } from '../bodies/bodyData'
+import { Actor } from '../actors/actor'
 import { Stage } from '../stages/stage'
 import { Game } from '../game'
 
 class FixtureData {
-  bodyData: BodyData
+  actor: Actor
   body: Body
   stage: Stage
   game: Game
@@ -16,8 +16,8 @@ class FixtureData {
 
   constructor (body: Body, fixtureDef: FixtureDef) {
     this.body = body
-    this.bodyData = body.getUserData() as BodyData
-    this.stage = this.bodyData.stage
+    this.actor = body.getUserData() as Actor
+    this.stage = this.actor.stage
     this.game = this.stage.game
     this.fixture = body.createFixture(fixtureDef) // PROBLEM: Locked During Callbacks
     this.fixture.setUserData(this)

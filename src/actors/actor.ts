@@ -3,7 +3,7 @@ import { FixtureData } from '../fixtures/fixtureData'
 import { Stage } from '../stages/stage'
 import { Game } from '../game'
 
-export class BodyData {
+export class Actor {
   body: Body
   stage: Stage
   game: Game

@@ -1,6 +1,6 @@
 import { CircleShape, Fixture, PolygonShape, Vec2, Body, ChainShape } from 'planck'
 import { FixtureData } from './fixtures/fixtureData'
-import { BodyData } from './bodies/bodyData'
+import { Actor } from './actors/actor'
 import { clamp } from './math'
 import { Game } from './game'
 import { tile } from './patterns/tile'
@@ -60,8 +60,8 @@ class Runner {
     this.game.stage.onStep()
     const bodies = this.getBodies()
     bodies.forEach(body => {
-      const bodyData = body.getUserData() as BodyData
-      bodyData.onStep()
+      const actor = body.getUserData() as Actor
+      actor.onStep()
     })
     const stepSize = this.timeStep * this.timeScale
     this.game.stage.world.step(stepSize)

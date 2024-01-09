@@ -1,9 +1,9 @@
 import { range } from '../math'
 import { Stage } from '../stages/stage'
-import { BodyData } from './bodyData'
+import { Actor } from './actor'
 import { Chain, Vec2 } from 'planck'
 
-export class Star extends BodyData {
+export class Star extends Actor {
   constructor (stage: Stage, position: Vec2) {
     super(stage, {
       type: 'static',

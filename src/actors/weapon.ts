@@ -1,12 +1,11 @@
-import { Vec2, Box, RevoluteJoint } from 'planck'
-import { BodyData } from './bodyData'
+import { Vec2, Box, DistanceJoint } from 'planck'
+import { Actor } from './actor'
 import { FixtureData } from '../fixtures/fixtureData'
 import { Fighter } from './fighter'
 
-export class Weapon extends BodyData {
+export class Weapon extends Actor {
   movePower = 0.5
   maxDistance = 1
-  length = 6
   fromPoint = Vec2(0, 0)
   toPoint = Vec2(0, 0)
   fighter: Fighter
@@ -20,12 +19,19 @@ export class Weapon extends BodyData {
       fixedRotation: false,
       angle: Math.random() * 2 * Math.PI,
       linearDamping: 0.3,
-      angularDamping: 0.0
+      angularDamping: 1
     })
     this.fighter = fighter
-    const hx = 0.5 * this.length
+    /*
     this.blade = this.createFixture({
       shape: new Box(hx, 0.2, Vec2(hx + this.maxDistance, 0)),
+      density: 0.01,
+      friction: 0,
+      restitution: 0
+    })
+    */
+    this.blade = this.createFixture({
+      shape: new Box(2, 0.2, Vec2(2, 0)),
       density: 0.01,
       friction: 0,
       restitution: 0
@@ -43,12 +49,23 @@ export class Weapon extends BodyData {
       collideConnected: false
     }))
     */
+    /*
     this.world.createJoint(new RevoluteJoint({
       bodyA: this.blade.body,
       bodyB: this.fighter.torso.body,
       localAnchorA: { x: 0, y: 0 },
       localAnchorB: { x: 0, y: 0 },
       referenceAngle: 0,
+      collideConnected: false
+    }))
+    */
+    this.world.createJoint(new DistanceJoint({
+      bodyA: this.blade.body,
+      bodyB: this.fighter.torso.body,
+      localAnchorA: { x: this.maxDistance, y: 0 },
+      localAnchorB: { x: 0, y: 0 },
+      frequencyHz: 0.3,
+      dampingRatio: 0,
       collideConnected: false
     }))
   }

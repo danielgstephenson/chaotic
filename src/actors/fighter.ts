@@ -1,10 +1,10 @@
 import { Vec2, Circle } from 'planck'
-import { BodyData } from './bodyData'
+import { Actor } from './actor'
 import { FixtureData } from '../fixtures/fixtureData'
 import { Stage } from '../stages/stage'
 import { Weapon } from './weapon'
 
-export class Fighter extends BodyData {
+export class Fighter extends Actor {
   alive = true
   movePower = 5
   moveDir = Vec2(0, 0)
@@ -28,6 +28,7 @@ export class Fighter extends BodyData {
     })
     this.torso.layer = 11
     this.torso.label = 'torso'
+    this.torso.preDraw = () => this.drawConnection()
     this.weapon = new Weapon(this)
     this.blade = this.weapon.blade
   }
@@ -45,7 +46,7 @@ export class Fighter extends BodyData {
 
   drawConnection (): void {
     const fromPoint = this.body.getWorldCenter()
-    const toPoint = this.weapon.body.getWorldPoint(Vec2(this.weapon.maxDistance, 0))
+    const toPoint = this.weapon.body.getWorldPoint(Vec2(0, 0))
     const context = this.game.runner.context
     context.strokeStyle = 'rgb(256,256,256,0.5)'
     context.lineWidth = 0.1

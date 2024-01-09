@@ -1,8 +1,8 @@
 import { Vec2, Circle, Box } from 'planck'
-import { BodyData } from './bodyData'
+import { Actor } from './actor'
 import { Stage } from '../stages/stage'
 
-export class Environment extends BodyData {
+export class Environment extends Actor {
   color = '#293030'
   wallThickness = 2
 
