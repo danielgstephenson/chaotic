@@ -1,6 +1,6 @@
 import { Vec2, Circle } from 'planck'
 import { Actor } from './actor'
-import { FixtureData } from '../fixtures/fixtureData'
+import { FixtureData } from '../feature'
 import { Stage } from '../stages/stage'
 import { Weapon } from './weapon'
 
@@ -49,6 +49,7 @@ export class Fighter extends Actor {
     const toPoint = this.weapon.body.getWorldPoint(Vec2(0, 0))
     const context = this.game.runner.context
     context.strokeStyle = 'rgb(256,256,256,0.5)'
+    context.lineCap = 'round'
     context.lineWidth = 0.1
     context.beginPath()
     context.moveTo(fromPoint.x, fromPoint.y)

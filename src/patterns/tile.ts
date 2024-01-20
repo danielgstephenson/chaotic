@@ -6,12 +6,12 @@ const size = 100 // this needs to be an even number
 canvas.width = size
 canvas.height = size
 context.fillStyle = '#000000'
-context.strokeStyle = '#99999910'
+context.strokeStyle = '#99999920'
 context.fillRect(0, 0, size, size)
 context.beginPath()
 context.rect(0, 0, size, size)
 context.lineJoin = 'miter'
-context.lineWidth = 4
+context.lineWidth = 2
 context.stroke()
 
 export const tile: CanvasPattern = context.createPattern(canvas, 'repeat') as CanvasPattern

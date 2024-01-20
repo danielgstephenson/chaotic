@@ -1,6 +1,6 @@
 import { Vec2, Box, DistanceJoint } from 'planck'
 import { Actor } from './actor'
-import { FixtureData } from '../fixtures/fixtureData'
+import { FixtureData } from '../feature'
 import { Fighter } from './fighter'
 
 export class Weapon extends Actor {
@@ -14,12 +14,12 @@ export class Weapon extends Actor {
   constructor (fighter: Fighter) {
     super(fighter.stage, {
       type: 'dynamic',
-      position: fighter.body.getPosition(),
+      position: Vec2.add(fighter.body.getPosition(), Vec2(0, 0)),
       bullet: true,
       fixedRotation: false,
       angle: Math.random() * 2 * Math.PI,
       linearDamping: 0.3,
-      angularDamping: 1
+      angularDamping: 0.6
     })
     this.fighter = fighter
     /*
@@ -62,10 +62,10 @@ export class Weapon extends Actor {
     this.world.createJoint(new DistanceJoint({
       bodyA: this.blade.body,
       bodyB: this.fighter.torso.body,
-      localAnchorA: { x: this.maxDistance, y: 0 },
+      localAnchorA: { x: 0, y: 0 },
       localAnchorB: { x: 0, y: 0 },
-      frequencyHz: 0.3,
-      dampingRatio: 0,
+      frequencyHz: 0.6,
+      dampingRatio: 0.0,
       collideConnected: false
     }))
   }

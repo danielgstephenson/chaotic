@@ -1,12 +1,11 @@
 import { Vec2 } from 'planck'
 import { Stage } from './stage'
-import { Stage2 } from './stage2'
 import { Game } from '../game'
 
-export class Stage1 extends Stage {
+export class Stage2 extends Stage {
   constructor (game: Game) {
     super(game)
-    this.north = 50
+    this.north = 190
     const width = 20
     this.corners.push(Vec2(-width, this.north))
     this.corners.push(Vec2(-width, -width))
@@ -20,6 +19,7 @@ export class Stage1 extends Stage {
       Vec2(-width, +this.north)
     ])
     this.player = this.addPlayer(Vec2(0, 0))
+    this.addEnemy(Vec2(0, 20))
     this.addStar(Vec2(0, 30))
   }
 
@@ -30,16 +30,11 @@ export class Stage1 extends Stage {
   respawn (): void {
     super.respawn()
     this.game.state = 'play'
-    this.game.stage = new Stage1(this.game)
+    console.log('respawnPoint', this.spawnPoint)
+    this.game.stage = new Stage2(this.game)
   }
 
   onComplete (): void {
-    console.log('stage 1 complete')
-    this.paused = true
-    this.game.stageCompleteMenu.show()
-  }
-
-  beginNextStage (): void {
-    this.game.stage = new Stage2(this.game)
+    console.log('stage complete')
   }
 }

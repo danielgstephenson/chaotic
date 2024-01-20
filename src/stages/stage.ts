@@ -1,15 +1,18 @@
 import { World, Vec2, Contact } from 'planck'
-import { FixtureData } from '../fixtures/fixtureData'
+import { FixtureData } from '../feature'
 import { Environment } from '../actors/environment'
 import { Game } from '../game'
 import { Star } from '../actors/star'
 import { Fighter } from '../actors/fighter'
+import { Runner } from '../runner'
 
 class Stage {
   game: Game
+  runner: Runner
   world: World
   player?: Fighter
   environment: Environment
+  paused = false
   corners: Vec2[] = []
   enemies: Fighter[] = []
   spawnPoint = Vec2(0, 0)
@@ -17,6 +20,7 @@ class Stage {
 
   constructor (game: Game) {
     this.game = game
+    this.runner = game.runner
     this.world = new World({ gravity: new Vec2(0, 0) })
     this.world.on('pre-solve', (contact) => this.preSolve(contact))
     this.world.on('begin-contact', (contact) => this.beginContact(contact))
@@ -34,10 +38,10 @@ class Stage {
       if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) x += 1
       this.player.moveDir = Vec2(x, y)
       const cursor = input.cursor
-      const canvas = this.game.runner.context.canvas
-      const vmin = Math.min(canvas.width, canvas.height)
-      const cursorDist = Math.sqrt(cursor.x * cursor.x + cursor.y * cursor.y) / vmin
-      if (cursorDist > 0.05) this.player.moveDir = Vec2(cursor.x, cursor.y)
+      // const canvas = this.game.runner.context.canvas
+      // const vmin = Math.min(canvas.width, canvas.height)
+      // const cursorDist = Math.sqrt(cursor.x * cursor.x + cursor.y * cursor.y) / vmin
+      if (cursor.buttons[0]) this.player.moveDir = Vec2(cursor.x, cursor.y)
     }
   }
 
@@ -45,40 +49,43 @@ class Stage {
     console.log('respawn')
   }
 
-  complete (): void {
-    console.log('complete')
+  onComplete (): void {
+    console.log('stage complete')
+  }
+
+  beginNextStage (): void {
+    console.log('begin next stage')
   }
 
   preSolve (contact: Contact): void {
     const a = contact.getFixtureA().getUserData() as FixtureData
     const b = contact.getFixtureB().getUserData() as FixtureData
-    if (a.label === 'blade' && b.label === 'torso') {
-      contact.setEnabled(false)
-    }
-    if (a.label === 'torso' && b.label === 'blade') {
+    const featureLabels = [a.label, b.label]
+    const actorLabels = [a.actor.label, b.actor.label]
+    if (featureLabels.includes('blade') && featureLabels.includes('torso')) {
       contact.setEnabled(false)
     }
     /*
-    if (a.label === 'blade' && b.label === 'wall') {
-      contact.setEnabled(false)
-    }
-    if (a.label === 'wall' && b.label === 'blade') {
+    if (featureLabels.includes('blade') && featureLabels.includes('wall')) {
       contact.setEnabled(false)
     }
     */
-    if (a.label === 'star' || b.label === 'star') {
+    if (featureLabels.includes('star') && featureLabels.includes('blade')) {
       contact.setEnabled(false)
+    }
+    if (featureLabels.includes('star') && featureLabels.includes('torso')) {
+      contact.setEnabled(false)
+      if (actorLabels.includes('player')) this.onComplete()
     }
   }
 
   beginContact (contact: Contact): void {
     const a = contact.getFixtureA().getUserData() as FixtureData
     const b = contact.getFixtureB().getUserData() as FixtureData
-    if (a.label === 'star' && b.label === 'torso' && b.actor.label === 'player') {
-      this.complete()
-    }
-    if (b.label === 'star' && a.label === 'torso' && a.actor.label === 'player') {
-      this.complete()
+    const featureLabels = [a.label, b.label]
+    const actorLabels = [a.actor.label, b.actor.label]
+    if (featureLabels.includes('star') && featureLabels.includes('torso')) {
+      if (actorLabels.includes('player')) this.onComplete()
     }
   }
 

@@ -1,5 +1,5 @@
 import { CircleShape, Fixture, PolygonShape, Vec2, Body, ChainShape } from 'planck'
-import { FixtureData } from './fixtures/fixtureData'
+import { FixtureData } from './feature'
 import { Actor } from './actors/actor'
 import { clamp } from './math'
 import { Game } from './game'
@@ -42,7 +42,7 @@ class Runner {
   }
 
   draw (newFrameTime: number): void {
-    if (this.paused) return
+    if (this.paused || this.game.stage.paused) return
     const dt = Math.min(0.2, (newFrameTime - this.lastFrameTime) / 1000)
     this.lastFrameTime = newFrameTime
     this.targetWorldTime += dt

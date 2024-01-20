@@ -4,7 +4,6 @@ class Input {
   game: Game
   keyboard = new Map<string, boolean>()
   cursor = { x: 0, y: 0, buttons: [false, false, false, false, false] }
-  pinchDiff = 0
 
   constructor (game: Game) {
     this.game = game
@@ -48,54 +47,26 @@ class Input {
   }
 
   onwheel (event: WheelEvent): void {
-    this.game.runner.zoom(0.001 * event.deltaY)
+    this.game.runner.zoom(0.005 * event.deltaY)
   }
 
   ontouchstart (event: TouchEvent): void {
-    this.cursor.buttons[0] = event.touches.length === 1
-    if (event.touches.length === 1) {
-      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
-    }
-    if (event.touches.length === 2) {
-      this.pinchDiff = this.getPinchDiff(event)
-    }
+    this.cursor.buttons[0] = event.touches.length >= 1
+    this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+    this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
   }
 
   ontouchend (event: TouchEvent): void {
-    this.cursor.buttons[0] = event.touches.length === 1
-    if (event.touches.length === 1) {
-      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
-    }
-    if (event.touches.length === 2) {
-      this.pinchDiff = this.getPinchDiff(event)
-    }
+    this.cursor.buttons[0] = event.touches.length > 1
+    this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+    this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
   }
 
   ontouchmove (event: TouchEvent): boolean {
-    this.cursor.buttons[0] = event.touches.length === 1
-    if (event.touches.length === 1) {
-      this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
-      this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
-    }
-    if (event.touches.length === 2) {
-      const newPinchDiff = this.getPinchDiff(event)
-      const dPinchDiff = newPinchDiff - this.pinchDiff
-      this.game.runner.zoom(-0.01 * dPinchDiff)
-    }
+    this.cursor.buttons[0] = true
+    this.cursor.x = event.touches[0].clientX - 0.5 * window.innerWidth
+    this.cursor.y = 0.5 * window.innerHeight - event.touches[0].clientY
     return false
-  }
-
-  getPinchDiff = function (event: TouchEvent): number {
-    if (event.touches.length !== 2) return 0
-    const x0 = event.touches[0].clientX
-    const y0 = event.touches[0].clientY
-    const x1 = event.touches[1].clientX
-    const y1 = event.touches[1].clientY
-    const dx = x1 - x0
-    const dy = y1 - y0
-    return Math.sqrt(dx * dx + dy * dy)
   }
 }
 

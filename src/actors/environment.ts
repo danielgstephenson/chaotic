@@ -3,7 +3,7 @@ import { Actor } from './actor'
 import { Stage } from '../stages/stage'
 
 export class Environment extends Actor {
-  color = '#293030'
+  wallColor = '#394040'
   wallThickness = 2
 
   constructor (stage: Stage) {
@@ -21,7 +21,7 @@ export class Environment extends Actor {
         friction: 1,
         restitution: 0
       })
-      corner.color = this.color
+      corner.color = this.wallColor
       if (i === 0) return false
       const oldPoint = points[i - 1]
       const vector = Vec2.sub(point, oldPoint)
@@ -33,7 +33,7 @@ export class Environment extends Actor {
         friction: 1,
         restitution: 0
       })
-      wall.color = this.color
+      wall.color = this.wallColor
       wall.label = 'wall'
     })
   }

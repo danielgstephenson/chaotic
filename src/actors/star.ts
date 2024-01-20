@@ -26,7 +26,7 @@ export class Star extends Actor {
       friction: 0,
       restitution: 0
     })
-    fixture.color = 'hsla(51, 100%, 41%, 1)'
+    fixture.color = 'hsla(51, 100%, 60%, 1)'
     fixture.label = 'star'
     fixture.layer = 7
   }

@@ -59,6 +59,41 @@ body {
   background-color: #10101099;
   outline: none;
 }
+#stageCompleteMenuDiv {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  flex-direction: column;
+}
+#stageCompleteMessage {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+  font-size: 15vmin;
+  font-family: no-continue;
+  text-align: center;
+  color: white;
+}
+#stageCompleteButton {
+  background-color: #10101099;
+  margin-top: 5vh;
+  margin-bottom: 15vh;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+  font-size: 10vmin;
+  font-family: library3am;
+  text-align: center;
+  color: rgb(0,200,255);
+}
+#stageCompleteButton:focus {
+  background-color: #10101099;
+  outline: none;
+}
 #mainMenuDiv {
   display: flex;
   flex-direction: column;
@@ -72,7 +107,7 @@ body {
   font-size: 15vmin;
   font-family: library3am;
   text-align: center;
-  color: rgb(0,355,70);
+  color: rgb(0,255,70);
 }
 .menuButton {
   background-color: #101010;

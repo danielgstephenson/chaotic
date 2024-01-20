@@ -1,9 +1,9 @@
 import { Fixture, FixtureDef, Body } from 'planck'
-import { Actor } from '../actors/actor'
-import { Stage } from '../stages/stage'
-import { Game } from '../game'
+import { Actor } from './actors/actor'
+import { Stage } from './stages/stage'
+import { Game } from './game'
 
-class FixtureData {
+class Feature {
   actor: Actor
   body: Body
   stage: Stage
@@ -30,4 +30,4 @@ class FixtureData {
   topDraw (): void {}
 }
 
-export { FixtureData }
+export { Feature as FixtureData }

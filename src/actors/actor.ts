@@ -1,5 +1,5 @@
 import { Body, BodyDef, World, FixtureDef } from 'planck'
-import { FixtureData } from '../fixtures/fixtureData'
+import { FixtureData } from '../feature'
 import { Stage } from '../stages/stage'
 import { Game } from '../game'
 
