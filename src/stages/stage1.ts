@@ -6,19 +6,15 @@ import { Game } from '../game'
 export class Stage1 extends Stage {
   constructor (game: Game) {
     super(game)
-    this.north = 50
+    const height = 50
     const width = 20
-    this.corners.push(Vec2(-width, this.north))
+    this.corners.push(Vec2(-width, height))
     this.corners.push(Vec2(-width, -width))
     this.corners.push(Vec2(+width, -width))
-    this.corners.push(Vec2(+width, this.north))
-    this.environment.addWalls([
-      Vec2(-width, +this.north),
-      Vec2(-width, -width),
-      Vec2(+width, -width),
-      Vec2(+width, +this.north),
-      Vec2(-width, +this.north)
-    ])
+    this.corners.push(Vec2(+width, height))
+    const outerCorners = this.corners.map(corner => corner)
+    outerCorners.push(this.corners[0])
+    this.environment.addWalls(outerCorners)
     this.player = this.addPlayer(Vec2(0, 0))
     this.addStar(Vec2(0, 30))
   }
@@ -40,6 +36,7 @@ export class Stage1 extends Stage {
   }
 
   beginNextStage (): void {
+    console.log('begin stage 2')
     this.game.stage = new Stage2(this.game)
   }
 }

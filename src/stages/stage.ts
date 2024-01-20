@@ -16,7 +16,6 @@ class Stage {
   corners: Vec2[] = []
   enemies: Fighter[] = []
   spawnPoint = Vec2(0, 0)
-  north = 100
 
   constructor (game: Game) {
     this.game = game

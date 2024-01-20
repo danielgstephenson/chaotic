@@ -20,7 +20,7 @@ export class StageCompleteMenu {
   }
 
   continue (): void {
-    this.game.stage.respawn()
+    this.game.stage.beginNextStage()
     this.menuDiv.style.display = 'none'
   }
 }

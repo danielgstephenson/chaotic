@@ -5,22 +5,18 @@ import { Game } from '../game'
 export class Stage2 extends Stage {
   constructor (game: Game) {
     super(game)
-    this.north = 190
-    const width = 20
-    this.corners.push(Vec2(-width, this.north))
-    this.corners.push(Vec2(-width, -width))
-    this.corners.push(Vec2(+width, -width))
-    this.corners.push(Vec2(+width, this.north))
-    this.environment.addWalls([
-      Vec2(-width, +this.north),
-      Vec2(-width, -width),
-      Vec2(+width, -width),
-      Vec2(+width, +this.north),
-      Vec2(-width, +this.north)
-    ])
+    const height = 20
+    const width = 50
+    this.corners.push(Vec2(-height, height))
+    this.corners.push(Vec2(-height, -height))
+    this.corners.push(Vec2(+width, -height))
+    this.corners.push(Vec2(+width, height))
+    const outerCorners = this.corners.map(corner => corner)
+    outerCorners.push(this.corners[0])
+    this.environment.addWalls(outerCorners)
     this.player = this.addPlayer(Vec2(0, 0))
-    this.addEnemy(Vec2(0, 20))
-    this.addStar(Vec2(0, 30))
+    this.addEnemy(Vec2(20, 0))
+    this.addStar(Vec2(40, 0))
   }
 
   onStep (): void {
@@ -35,6 +31,13 @@ export class Stage2 extends Stage {
   }
 
   onComplete (): void {
-    console.log('stage complete')
+    console.log('stage 2 complete')
+    this.paused = true
+    this.game.stageCompleteMenu.show()
+  }
+
+  beginNextStage (): void {
+    console.log('begin next stage...')
+    // this.game.stage = new Stage2(this.game)
   }
 }

@@ -42,6 +42,7 @@ class Runner {
   }
 
   draw (newFrameTime: number): void {
+    window.requestAnimationFrame(t => this.draw(t))
     if (this.paused || this.game.stage.paused) return
     const dt = Math.min(0.2, (newFrameTime - this.lastFrameTime) / 1000)
     this.lastFrameTime = newFrameTime
@@ -50,7 +51,6 @@ class Runner {
       this.step()
     }
     this.render()
-    window.requestAnimationFrame(t => this.draw(t))
   }
 
   step (): void {
